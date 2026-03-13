@@ -40,3 +40,35 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+
+## Azure Cosmos DB (Optional)
+
+This project includes a small server-side helper to read from an Azure Cosmos DB container.
+
+### 1) Set your environment variables
+
+Copy `.env.example` to `.env` and fill in your Cosmos DB values:
+
+```sh
+cp .env.example .env
+# then edit .env with your values
+```
+
+When deployed, set the same environment variables in your hosting provider (e.g. Azure Static Web Apps or your server).
+
+On Azure Static Web Apps, our API is exposed via an Azure Functions endpoint at `/api/cosmos` (from `api/cosmos`).
+
+### 2) Query the API endpoint
+
+A simple API endpoint is exposed at:
+
+```
+GET /api/cosmos
+```
+
+It returns items from the configured container. You can also request a specific item by id:
+
+```
+GET /api/cosmos?id=<itemId>&pk=<partitionKey>
+```
+

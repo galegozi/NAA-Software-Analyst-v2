@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
- 		"build": "vite build --outDir build",
+		"build": "vite build --outDir build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -46,5 +46,8 @@
 		"vite-plugin-devtools-json": "^1.0.0",
 		"vitest": "^4.1.0",
 		"vitest-browser-svelte": "^2.0.2"
+	},
+	"dependencies": {
+		"@azure/cosmos": "^4.9.1"
 	}
 }
