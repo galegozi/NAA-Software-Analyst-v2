@@ -41,7 +41,7 @@
     <p>No items were returned from the container.</p>
   {:else}
     <ul class="space-y-2">
-      {#each items as item}
+      {#each items as item, i (item.id ?? i)}
         <li class="rounded border border-gray-200 p-3">
           <pre class="whitespace-pre-wrap text-sm">{JSON.stringify(item, null, 2)}</pre>
         </li>
