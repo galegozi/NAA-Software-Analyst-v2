@@ -1,4 +1,5 @@
 {
+  "scriptFile": "index.cjs",
   "bindings": [
     {
       "authLevel": "anonymous",
