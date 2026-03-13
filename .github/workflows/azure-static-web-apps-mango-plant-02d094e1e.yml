@@ -25,6 +25,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: CI diagnostics
+        run: |
+          echo "=== Node / npm versions ==="
+          node -v
+          npm -v
+          echo "=== svelte-kit info ==="
+          npx svelte-kit --version || true
+          which svelte-kit || true
+          echo "=== node_modules/.bin ==="
+          ls -la node_modules/.bin || true
+
       - name: Build
         run: npm run build
 
