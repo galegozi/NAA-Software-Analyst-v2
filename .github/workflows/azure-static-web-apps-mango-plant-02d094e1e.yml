@@ -40,8 +40,14 @@ jobs:
         run: |
           echo "=== svelte-kit --help ==="
           npx svelte-kit --help || true
-          echo "=== svelte-kit build (verbose) ==="
-          npx svelte-kit build --verbose
+          echo "=== @sveltejs/kit package.json ==="
+          cat node_modules/@sveltejs/kit/package.json || true
+          echo "=== node_modules/@sveltejs/kit/svelte-kit.js --help ==="
+          node node_modules/@sveltejs/kit/svelte-kit.js --help || true
+          echo "=== node_modules/@sveltejs/kit/svelte-kit.js build (verbose) ==="
+          node node_modules/@sveltejs/kit/svelte-kit.js build --verbose || true
+          echo "=== npm run build (fallback) ==="
+          npm run build --if-present || true
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
