@@ -10,71 +10,30 @@ on:
       - main
 
 jobs:
-  build_site:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22 # prefer Node 22 to satisfy some dev deps that require >=20
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: CI diagnostics
-        run: |
-          echo "=== Node / npm versions ==="
-          node -v
-          npm -v
-          echo "=== svelte-kit info ==="
-          npx svelte-kit --version || true
-          which svelte-kit || true
-          echo "=== node_modules/.bin ==="
-          ls -la node_modules/.bin || true
-
-      - name: Build
-        run: npm run build
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build
-          path: 'build/'
-
   build_and_deploy_job:
-    needs: build_site
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: build
-          path: build
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_MANGO_PLANT_02D094E1E }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
-          app_location: "build"
-          action: "upload"
+          action: 'upload'
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # We're skipping the app build inside the deploy action because the artifact is prebuilt above
-          skip_app_build: true
-          app_artifact_location: "build"
-          api_location: "api" # Api source code path - optional
-          output_location: "build" # Built app content directory - optional
+          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
+          app_location: '/' # App source code path
+          api_location: 'build/server' # Api source code path - optional
+          output_location: 'build/static' # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
+        env:
+          VITE_USE_COSMOS: 'true'
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -86,5 +45,4 @@ jobs:
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_MANGO_PLANT_02D094E1E }}
-          app_location: "build"
-          action: "close"
+          action: 'close'

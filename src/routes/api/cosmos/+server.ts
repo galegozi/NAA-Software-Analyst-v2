@@ -18,7 +18,7 @@ export async function GET({ url }) {
     });
 
     return json(items);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Cosmos DB request failed", error);
     return json({ error: String(error) }, { status: 500 });
   }
