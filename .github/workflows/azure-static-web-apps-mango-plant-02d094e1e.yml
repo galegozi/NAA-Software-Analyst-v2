@@ -19,7 +19,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20 # or your preferred Node version
+          node-version: 18 # use Node 18 to match project's engines and Oryx expectation
           cache: 'npm'
 
       - name: Install dependencies
