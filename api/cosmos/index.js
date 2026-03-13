@@ -1,4 +1,4 @@
-const { CosmosClient } = require("@azure/cosmos");
+import { CosmosClient } from "@azure/cosmos";
 
 const endpoint = process.env.COSMOS_DB_ENDPOINT;
 const key = process.env.COSMOS_DB_KEY;
@@ -17,7 +17,7 @@ if (missingEnv.length === 0) {
   containerRef = client.database(database).container(container);
 }
 
-module.exports = async function (context, req) {
+export default async function (context, req) {
   context.log("Azure Functions /api/cosmos invoked");
 
   if (missingEnv.length > 0) {
@@ -59,9 +59,9 @@ module.exports = async function (context, req) {
   } catch (error) {
     const message = error?.message ?? String(error);
     context.log.error("Cosmos DB request failed", message);
-    context.res = {
+    return {
       status: 500,
       body: { error: message },
     };
   }
-};
+}
