@@ -36,8 +36,12 @@ jobs:
           echo "=== node_modules/.bin ==="
           ls -la node_modules/.bin || true
 
-      - name: Build
-        run: npm run build
+      - name: Build (verbose)
+        run: |
+          echo "=== svelte-kit --help ==="
+          npx svelte-kit --help || true
+          echo "=== svelte-kit build (verbose) ==="
+          npx svelte-kit build --verbose
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
