@@ -11,13 +11,22 @@
     try {
       const res = await fetch("/api/cosmos");
       if (!res.ok) {
-        let message = `Request failed (${res.status})`;
-        try {
-          const body = await res.json();
-          if (body?.error) message = body.error;
-        } catch {
-          // ignore
+        let message = `Request failed (${res.status}${res.statusText ? ` ${res.statusText}` : ""})`;
+
+        const text = await res.text();
+        if (text) {
+          try {
+            const body = JSON.parse(text);
+            if (body?.error) {
+              message = body.error;
+            } else {
+              message += `: ${JSON.stringify(body)}`;
+            }
+          } catch {
+            message += `: ${text}`;
+          }
         }
+
         throw new Error(message);
       }
 
