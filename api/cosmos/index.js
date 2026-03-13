@@ -5,17 +5,33 @@ const key = process.env.COSMOS_DB_KEY;
 const database = process.env.COSMOS_DB_DATABASE;
 const container = process.env.COSMOS_DB_CONTAINER;
 
-if (!endpoint || !key || !database || !container) {
-  throw new Error(
-    "Missing required Cosmos DB environment variables. Set COSMOS_DB_ENDPOINT, COSMOS_DB_KEY, COSMOS_DB_DATABASE, and COSMOS_DB_CONTAINER."
-  );
-}
+const missingEnv = [];
+if (!endpoint) missingEnv.push("COSMOS_DB_ENDPOINT");
+if (!key) missingEnv.push("COSMOS_DB_KEY");
+if (!database) missingEnv.push("COSMOS_DB_DATABASE");
+if (!container) missingEnv.push("COSMOS_DB_CONTAINER");
 
-const client = new CosmosClient({ endpoint, key });
-const containerRef = client.database(database).container(container);
+let containerRef;
+if (missingEnv.length === 0) {
+  const client = new CosmosClient({ endpoint, key });
+  containerRef = client.database(database).container(container);
+}
 
 module.exports = async function (context, req) {
   context.log("Azure Functions /api/cosmos invoked");
+
+  if (missingEnv.length > 0) {
+    const message =
+      "Missing required Cosmos DB environment variables. " +
+      "Set " +
+      missingEnv.join(", ") +
+      ".";
+    context.log.error(message);
+    return {
+      status: 500,
+      body: { error: message },
+    };
+  }
 
   try {
     const id = req.query?.id ?? req.body?.id;
