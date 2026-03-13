@@ -1,0 +1,8 @@
+{
+  "name": "naa-software-analyst-api",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+    "@azure/cosmos": "^4.9.1"
+  }
+}
